@@ -14,13 +14,14 @@ import lombok.Data;
 @Entity
 @Table(	name = "blog")
 @Data
-public class Blogs {//not a spring bean
+public class Blogs {
 	
 	@Id
 	@NotNull(message = "Blog Name cannot be blank#######")
-	@Size(min=10, message="Minimum 10 Characters")
+	@Size(min=20, message="Minimum 20 Characters")
 	private String blogname;
 	private String userid;
+	@Size(min=20, message="Minimum 20 Characters")
 	private String category;
 	@NotNull(message = "Author Name cannot be blank#######")
 	@Size(min=3, message="Minimum 3 Characters")
