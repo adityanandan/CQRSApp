@@ -18,10 +18,10 @@ public class Blogs {
 	
 	@Id
 	@NotNull(message = "Blog Name cannot be blank#######")
-	@Size(min=20, message="Minimum 20 Characters")
+	@Size(min=5, message="Minimum 5 Characters")
 	private String blogname;
 	private String userid;
-	@Size(min=20, message="Minimum 20 Characters")
+	@Size(min=5, message="Minimum 5 Characters")
 	private String category;
 	@NotNull(message = "Author Name cannot be blank#######")
 	@Size(min=3, message="Minimum 3 Characters")

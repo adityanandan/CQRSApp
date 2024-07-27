@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController 
-@RequestMapping("/blogsite/blogs")
+@RequestMapping("/api/v1.0/blogsite")
 public class BlogSearchController extends ErrorController {
 	@Autowired
 	BlogRepository blogRepository;
@@ -39,7 +39,7 @@ public class BlogSearchController extends ErrorController {
 	 * @param category
 	 * @return
 	 */
-	@GetMapping("/info/{category}")
+	@GetMapping("blogs/info/{category}")
 	public ResponseEntity<Object> searchByCategory(@PathVariable String category) {
 		log.debug("inside searchbyCategory");
 		FindAllByCategoryQuery findAllByCategoryQuery = new FindAllByCategoryQuery();
@@ -61,7 +61,7 @@ public class BlogSearchController extends ErrorController {
 	 * @param todate
 	 * @return
 	 */
-	@GetMapping("/info/{category}/{fromdate}/{todate}")
+	@GetMapping("blogs/get/{category}/{fromdate}/{todate}")
 	public ResponseEntity<Object> searchByCategoryAndRange(@PathVariable String category,
 			@PathVariable String fromdate, @PathVariable String todate) {
 		LocalDate toDate = LocalDate.parse(todate).plusDays(1);

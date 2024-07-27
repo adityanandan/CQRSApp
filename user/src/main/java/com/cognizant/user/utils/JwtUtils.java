@@ -23,7 +23,7 @@ public class JwtUtils {
 	public String generateJwtToken(String ID) {
 		logger.debug("inside generate method");
 		long nowMillis = System.currentTimeMillis();
-		Date exp = new Date(nowMillis + jwtExpirationMs);
+		Date exp = new Date(nowMillis*1000 + jwtExpirationMs);
         // Build the JWT token
         String token = Jwts.builder()
             .setId(ID)

@@ -12,9 +12,6 @@ public class User {
 	private String username;
 	private String password;
 	private String email;
-	private String firstName;
-	private String lastName;
-	private String contactNumber;
 	private String JwtToken;
 
 	public String getId() {
@@ -33,21 +30,6 @@ public class User {
 		this.email = email;
 	}
 
-	public String getFirstName() {
-		return firstName;
-	}
-
-	public void setFirstName(String firstName) {
-		this.firstName = firstName;
-	}
-
-	public String getLastName() {
-		return lastName;
-	}
-
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
-	}
 
 	public String getUsername() {
 		return username;
@@ -68,15 +50,7 @@ public class User {
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", username=" + username + ", password=" + password + ", email=" + email
-				+ ", firstName=" + firstName + ", lastName=" + lastName + ", contactNumber=" + contactNumber + "]";
-	}
-
-	public String getContactNumber() {
-		return contactNumber;
-	}
-
-	public void setContactNumber(String contactNumber) {
-		this.contactNumber = contactNumber;
+				+ "]";
 	}
 
 	public String getJwtToken() {

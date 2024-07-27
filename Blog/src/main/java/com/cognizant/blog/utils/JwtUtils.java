@@ -18,9 +18,6 @@ public class JwtUtils {
 
 	@Value("${blogsite.app.jwtSecret}")
 	private String jwtSecret;
-
-	@Value("${blogsite.app.jwtExpirationMs}")
-	private int jwtExpirationMs;
 	
 	public String getUserIdFromJwtToken(String token) {
 		token = token.replace("Bearer ","").trim();

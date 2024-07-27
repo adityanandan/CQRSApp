@@ -28,6 +28,7 @@ import com.cognizant.blog.command.CreateBlogCommand;
 import com.cognizant.blog.common.AppConstants;
 import com.cognizant.blog.entity.Blogs;
 import com.cognizant.blog.query.DeleteBlogQuery;
+import com.cognizant.blog.query.GetAllBlogsQuery;
 import com.cognizant.blog.query.GetMyBlogsQuery;
 import com.cognizant.blog.repository.BlogRepository;
 import com.cognizant.blog.service.KafKaProducerService;
@@ -38,7 +39,7 @@ import lombok.extern.slf4j.Slf4j;;
 @Slf4j
 @CrossOrigin(origins = "*", maxAge = 3600)
 @RestController
-@RequestMapping("/blogsite/user/blogs")
+@RequestMapping("/api/v1.0/blogsite")
 public class BlogController extends ErrorController {
 	@Autowired
 	BlogRepository blogRepository;
@@ -56,7 +57,7 @@ public class BlogController extends ErrorController {
 	 * @param userDetails
 	 * @return
 	 */
-	@PostMapping("/add")
+	@PostMapping("user/blogs/add")
 	public ResponseEntity<Object> addBlog(@Valid @RequestBody Blogs blog, HttpServletRequest http) {
 		log.debug("inside addBlog");
 		String jwtToken =""+http.getHeader("Authorization");
@@ -91,7 +92,7 @@ public class BlogController extends ErrorController {
 	 * @param userDetails
 	 * @return
 	 */
-	@DeleteMapping("/delete/{blogName}")
+	@DeleteMapping("user/delete/{blogName}")
 	public ResponseEntity<Object> deleteBlog(@PathVariable String blogName, HttpServletRequest http) {
 		
 		String jwtToken =""+http.getHeader("Authorization");
@@ -104,7 +105,7 @@ public class BlogController extends ErrorController {
 				deleteBlogQuery.setBlog(blog.get());
 				blogRepository.delete(blog.get());
 				queryGateway.query(deleteBlogQuery,String.class);
-				kafkaProducerService.addDelBlog(blog.get(), AppConstants.TOPIC_ADD_BLOG);
+				kafkaProducerService.addDelBlog(blog.get(), AppConstants.TOPIC_DELETE_BLOG);
 				return new ResponseEntity<Object>("Blog Deleted Success", HttpStatus.OK);
 			}
 			return new ResponseEntity<Object>("Blog already deleted / not exists", HttpStatus.BAD_REQUEST);
@@ -118,7 +119,7 @@ public class BlogController extends ErrorController {
 	 * @param userDetails
 	 * @return
 	 */
-	@GetMapping("/getMyBlogs")
+	@GetMapping("user/getMyBlogs")
 	public ResponseEntity<Object> getMyBlogs(HttpServletRequest http) {
 		String jwtToken =""+http.getHeader("Authorization");
 		if(jwtUtils.validateJwtToken(jwtToken)) {
@@ -141,13 +142,18 @@ public class BlogController extends ErrorController {
 	 * 
 	 * @return
 	 */
-	@GetMapping("/getall")
+	@GetMapping("blogs/getall")
 	public ResponseEntity<Object> getAllBlogs() {
-		GetMyBlogsQuery getMyBlogsQuery = new GetMyBlogsQuery();
-		getMyBlogsQuery.setUserid(null);
-		CompletableFuture<List<Object>> allBlogs = queryGateway.query(getMyBlogsQuery, ResponseTypes.multipleInstancesOf(Object.class));
-		List<Object> blogs = allBlogs.join();
-		kafkaProducerService.findBlogs(blogs, AppConstants.TOPIC_FINDMY_BLOGS);
+//		GetAllBlogsQuery getMyBlogsQuery = new GetAllBlogsQuery();
+//		//getMyBlogsQuery.setUserid(null);
+//		CompletableFuture<List<Object>> allBlogs = queryGateway.query(getMyBlogsQuery, ResponseTypes.multipleInstancesOf(Object.class));
+//		List<Object> blogs = allBlogs.join();
+		List<Blogs> blogs= blogRepository.findAll();
+//		kafkaProducerService.findBlogs(blogs, AppConstants.TOPIC_FINDALL_BLOGS);
 		return new ResponseEntity<Object>(blogs, HttpStatus.OK);
 	}
+	@GetMapping("/health")
+    public String healthCheck() {
+        return "blog Application is running!";
+    }
 }

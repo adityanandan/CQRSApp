@@ -25,7 +25,7 @@ import com.cognizant.user.service.UserService;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/api/v1.0/user")
+@RequestMapping("/api/v1.0/userauth")
 public class UserAppController {
 
 	@Autowired
@@ -83,7 +83,16 @@ public class UserAppController {
 	public ResponseEntity<List<User>> searchUser(@PathVariable("username") String username) {
 		return new ResponseEntity<>(userService.getUserByUsername(username), HttpStatus.OK);
 	}
-
+	
+	@GetMapping("/jwt/authentication/{username}")
+	public ResponseEntity<String> getJwtToken(@PathVariable("username") String username) {
+		return new ResponseEntity<>(userService.getJwtTokenByUsername(username), HttpStatus.OK);
+	}
+	
+	@GetMapping("/health")
+    public String healthCheck() {
+        return "USER Application is running!";
+    }
 
 
 }

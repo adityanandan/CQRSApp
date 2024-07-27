@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public User createUser(User user) {
-		user.setJwtToken(jwtUtils.generateJwtToken(user.getFirstName()));
+		user.setJwtToken(jwtUtils.generateJwtToken(user.getUsername()));
 		Optional<User> isUserWithEmailPresent = userRepository.findUserByEmail(user.getEmail());
 		Optional<User> isUserWithUsernamePresent = userRepository.findByUsername(user.getUsername());
 		if (isUserWithUsernamePresent.isPresent()) {
@@ -124,6 +124,15 @@ public class UserServiceImpl implements UserService {
 		map.put("newPassword", user.getPassword());
 		map.put("resetStatus", SUCCESS);
 		return map;
+	}
+
+	@Override
+	public String getJwtTokenByUsername(String username) {
+		Optional<User> isUserWithUsernamePresent = userRepository.findByUsername(username);
+		if (!isUserWithUsernamePresent.isPresent()) {
+			throw new ResourceNotFoundException("The username " + username + " is not registered");
+		}
+		return isUserWithUsernamePresent.get().getJwtToken();
 	}
 
 }

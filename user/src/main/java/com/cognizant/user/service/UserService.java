@@ -27,4 +27,6 @@ public interface UserService {
 	Map<String, String> forgotPassword(String username);
 
 	Map<String, String> resetPassword(String username, String password);
+
+	String getJwtTokenByUsername(String username);
 }
